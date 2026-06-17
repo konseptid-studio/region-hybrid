@@ -1,0 +1,39 @@
+// Quickstart Example - region_hybrid_quickstart.cpp
+// Copy this into examples/quickstart.cpp or your own file
+
+#include "region_hybrid.h"
+#include <iostream>
+#include <vector>
+
+// TODO: Add your image loader (stb_image recommended)
+std::vector<region_hybrid::RGBf> LoadImage(const char* filename, int& width, int& height);
+
+int main() {
+    std::cout << "=== RegionHybrid Quickstart ===\n";
+
+    int w = 0, h = 0;
+    auto image = LoadImage("input.png", w, h);   // Replace with real loader
+
+    if (image.empty()) {
+        std::cerr << "Failed to load image!\n";
+        return 1;
+    }
+
+    // Configure parameters
+    region_hybrid::Params params;
+    params.tones = 12;
+    params.use_nim = true;
+    params.max_region_colors = 3;
+
+    // Run the algorithm
+    auto result = region_hybrid::Run(image, w, h, params);
+
+    std::cout << "Processing complete!\n";
+    std::cout << "Regions detected: " << result.regions.size() << "\n";
+    std::cout << "Tone map size: " << result.tone_final.size() << " pixels\n";
+
+    // TODO: Save outputs (tone_final, region_id, etc.)
+    // SaveToneMap("output_tone.png", result.tone_final, w, h);
+
+    return 0;
+}
